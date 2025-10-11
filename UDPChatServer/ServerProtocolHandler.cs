@@ -1,12 +1,12 @@
 ﻿using System.Net;
+using UDPChatServer.DataInterfaces;
+using UDPChatServer.Datamodels;
+using UDPChatServer.Security;
 
 namespace UDPChatServer
 {
     internal class ServerProtocolHandler
     {
-
-
-
         ServerHandler ServerHandler { get; set; }
 
         private static readonly HashSet<string> NonEncryptedCommands = new() { "CONNECT", "PUBKEY", "PONG", "STATUS" };
@@ -73,7 +73,7 @@ namespace UDPChatServer
                         await HandlePubKey(senderEndpoint, clientInfo, content);
                         return;
                     case "PONG":
-                        if (ServerHandler.GetPendingPongs().TryRemove(senderEndpoint, out var tcs))
+                        if (ServerHandler.ClientDataInterface.GetPendingPongs().TryRemove(senderEndpoint, out var tcs))
                             tcs.SetResult(true);
                         clientInfo.LastPingTime = DateTime.UtcNow;
                         return;
@@ -86,7 +86,7 @@ namespace UDPChatServer
 
             if (EncryptedCommands.Contains(command))
             {
-                KeyExchangeMessage keys = await ServerHandler.encryptionKeyHandler.GetKeyExchangeMessage(senderEndpoint);
+                KeyExchangeMessage keys = await ServerHandler.EncryptionKeyHandler.GetKeyExchangeMessage(senderEndpoint);
                 byte[] encryptedKey = Convert.FromBase64String(keys.AESKey);
                 byte[] encryptedIV = Convert.FromBase64String(keys.AESIV);
                 byte[] cipher = Convert.FromBase64String(content);
@@ -112,7 +112,7 @@ namespace UDPChatServer
             // Update de status van de client
             clientInfo.clientStatus = ParseClientStatus(content);
             clientInfo.LastSeen = DateTime.UtcNow;
-            ServerHandler.UpdateClientStatus(senderEndpoint, clientInfo);
+            ServerHandler.ClientDataInterface.UpdateClientStatus(senderEndpoint, clientInfo);
         }
 
         private async Task HandleMessage(IPEndPoint senderEndpoint, ClientState clientInfo, string command, string clientName, string messageId, string plaintext)
@@ -122,22 +122,22 @@ namespace UDPChatServer
 
             // ACK terugsturen 
             string ackMessage = $"ACK {messageId}";
-            await ServerHandler.SendDataToClient(senderEndpoint, ackMessage);
+            await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, ackMessage);
 
             // Bericht broadcasten naar andere clients 
             string broadcastMessage = $"MSG {clientName} {plaintext}";
-            await ServerHandler.SendDataToClients(senderEndpoint, broadcastMessage, encrypt: true, 2);
+            await ServerHandler.MessageDataInterface.SendPacketToClients(ServerHandler.ClientDataInterface, senderEndpoint, broadcastMessage, encrypt: true, 2);
         }
 
         private async Task HandlePubKey(IPEndPoint senderEndpoint, ClientState clientInfo, string content)
         {
             byte[] clientPubKey = Convert.FromBase64String(content);
 
-            KeyExchangeMessage keys = await ServerHandler.encryptionKeyHandler.GenAESKeyandIV(senderEndpoint, clientPubKey);
+            KeyExchangeMessage keys = await ServerHandler.EncryptionKeyHandler.GenAESKeyandIV(senderEndpoint, clientPubKey);
 
             string msg = $"SETKEY {keys.AESKey} {keys.AESIV}";
 
-            await ServerHandler.SendDataToClient(senderEndpoint, msg);
+            await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, msg);
         }
 
         private async Task HandleConnect(IPEndPoint senderEndpoint, ClientState clientInfo, string[] parsedData)
@@ -149,35 +149,35 @@ namespace UDPChatServer
 
             if (formattedName == "server" || formattedName.Contains("(") || formattedName.Contains(")"))
             {
-                await ServerHandler.SendDataToClient(senderEndpoint, $"MSG (SERVER) VERBODEN NAAM!", false);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"MSG (SERVER) VERBODEN NAAM!", false);
                 return;
             }
 
-            if (!ServerHandler.GetAllClients().ContainsKey(senderEndpoint))
+            if (!ServerHandler.ClientDataInterface.GetAllClients().ContainsKey(senderEndpoint))
             {
 
 
-                await ServerHandler.SendDataToClient(senderEndpoint, $"ACK {ackId}", false);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"ACK {ackId}", false);
 
                 clientInfo.Username = Username;
                 clientInfo.clientStatus = ClientStatus.Available;
                 clientInfo.LastSeen = DateTime.UtcNow;
                 clientInfo.JoinTime = DateTime.UtcNow;
-                ServerHandler.UpdateClientStatus(senderEndpoint, clientInfo);
+                ServerHandler.ClientDataInterface.UpdateClientStatus(senderEndpoint, clientInfo);
 
                 Console.WriteLine($"New client joined: {Username} ({senderEndpoint})");
 
             }
             else
             {
-                await ServerHandler.SendDataToClient(senderEndpoint, $"ACK {ackId}");
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"ACK {ackId}");
 
                 // voeg client toe als nieuw
                 clientInfo.Username = Username;
                 clientInfo.clientStatus = ClientStatus.Available;
                 clientInfo.LastSeen = DateTime.UtcNow;
                 clientInfo.JoinTime = DateTime.UtcNow;
-                ServerHandler.UpdateClientStatus(senderEndpoint, clientInfo);
+                ServerHandler.ClientDataInterface.UpdateClientStatus(senderEndpoint, clientInfo);
 
             }
         }

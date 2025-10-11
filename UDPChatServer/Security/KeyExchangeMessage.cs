@@ -1,4 +1,4 @@
-﻿namespace UDPChatServer
+﻿namespace UDPChatServer.Security
 {
     internal class KeyExchangeMessage
     {
@@ -8,8 +8,8 @@
 
         public KeyExchangeMessage(byte[] Key, byte[] IV)
         {
-            this.AESKey = Convert.ToBase64String(Key);
-            this.AESIV = Convert.ToBase64String(IV);
+            AESKey = Convert.ToBase64String(Key);
+            AESIV = Convert.ToBase64String(IV);
         }
 
     }

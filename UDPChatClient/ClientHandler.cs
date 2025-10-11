@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using UDPChatClient.Security;
 
 namespace UDPChatClient
 {
@@ -18,6 +19,8 @@ namespace UDPChatClient
         int ackID;
 
         public bool ClientIsOnline { get; private set; }
+
+        private bool IsSecuredConnection;
 
         public ClientHandler(string serverIp, int serverPort, string name)
         {
@@ -46,6 +49,19 @@ namespace UDPChatClient
                 string[] parts = txt.Split(" ");
                 string command = parts[0];
 
+                if (command == "SETKEY" && !IsSecuredConnection)
+                {
+                    byte[] encKey = Convert.FromBase64String(parts[1]);
+                    byte[] encIV = Convert.FromBase64String(parts[2]);
+
+                    byte[] aesKey = encryptionHandler.DecryptWithPrivateKey(encKey);
+                    byte[] aesIV = encryptionHandler.DecryptWithPrivateKey(encIV);
+
+                    encryptionHandler.SetAESKeyAndIV(aesKey, aesIV);
+                    IsSecuredConnection = true;
+                    ConsoleHandler.WriteToConsole("De verbinding is beveiliged.");
+                }
+
                 switch (command)
                 {
                     case "MSG":
@@ -73,16 +89,7 @@ namespace UDPChatClient
                         ConsoleHandler.WriteToConsole($"{statusUser} is nu {status}");
                         break;
                     case "PING":
-                        await SendDataToServer($"PONG {username}");
-                        break;
-                    case "SETKEY":
-                        byte[] encKey = Convert.FromBase64String(parts[1]);
-                        byte[] encIV = Convert.FromBase64String(parts[2]);
-
-                        byte[] aesKey = encryptionHandler.DecryptWithPrivateKey(encKey);
-                        byte[] aesIV = encryptionHandler.DecryptWithPrivateKey(encIV);
-
-                        encryptionHandler.SetAESKeyAndIV(aesKey, aesIV);
+                        await SendPacketToServer($"PONG {username}");
                         break;
                     default:
                         ConsoleHandler.WriteToConsole("Onbekend bericht ontvangen: " + txt);
@@ -106,7 +113,7 @@ namespace UDPChatClient
                     else
                     {
                         string fullMsg = $"STATUS {username} {command}";
-                        await SendDataToServer(fullMsg);
+                        await SendPacketToServer(fullMsg);
                     }
 
 
@@ -128,7 +135,7 @@ namespace UDPChatClient
 
             pendingAcks[_ackID] = tcs;
 
-            await SendDataToServer($"CONNECT {username} {_ackID}");
+            await SendPacketToServer($"CONNECT {username} {_ackID}");
 
             bool isSuccess = await HandleACK(tcs,
                             timeout,
@@ -139,7 +146,7 @@ namespace UDPChatClient
             if (isSuccess)
             {
                 string pubKeyString = Convert.ToBase64String(encryptionHandler.PublicKey);
-                await SendDataToServer($"PUBKEY {username} {pubKeyString}");
+                await SendPacketToServer($"PUBKEY {username} {pubKeyString}");
             }
 
         }
@@ -149,9 +156,9 @@ namespace UDPChatClient
         {
             int messageID = ackID++;
 
-            string cipher = Convert.ToBase64String(encryptionHandler.EncryptMessage(message));
+            string cipherText = Convert.ToBase64String(encryptionHandler.EncryptMessage(message));
 
-            string fullMsg = $"MSG {username} {messageID} {cipher}";
+            string fullMsg = $"MSG {username} {messageID} {cipherText}";
 
             int timeout = 5000; // 5 seconden
 
@@ -159,7 +166,7 @@ namespace UDPChatClient
 
             pendingAcks[messageID] = tcs;
 
-            await SendDataToServer(fullMsg);
+            await SendPacketToServer(fullMsg);
 
             await HandleACK(tcs, timeout, messageID, "Bericht is niet verstuurd naar server!");
         }
@@ -194,11 +201,18 @@ namespace UDPChatClient
         }
 
 
-        private async Task SendDataToServer(string data)
+        private async Task SendPacketToServer(string data)
         {
-            byte[] Bytes = Encoding.UTF8.GetBytes(data);
-            await client.SendAsync(Bytes, Bytes.Length, serverEndpoint);
+            byte[] bytesToSend;
+
+            string hmac = encryptionHandler.ComputeHMAC(data);
+
+            string fullMsg = $"{data} {hmac}";
+            bytesToSend = Encoding.UTF8.GetBytes(fullMsg);
+
+            await client.SendAsync(bytesToSend, bytesToSend.Length, serverEndpoint);
         }
+
 
     }
 }

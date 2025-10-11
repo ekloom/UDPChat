@@ -2,7 +2,7 @@
 using System.Net;
 using System.Security.Cryptography;
 
-namespace UDPChatServer
+namespace UDPChatServer.Security
 {
     internal class EncryptionKeyHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace UDPChatServer
+﻿namespace UDPChatServer.Datamodels
 {
     internal class MessageInfo
     {

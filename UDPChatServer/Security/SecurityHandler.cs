@@ -1,34 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-
-namespace UDPChatClient
+namespace UDPChatServer.Security
 {
     internal class SecurityHandler
     {
-        static RSA rsa;  // asymmetrisch voor sessiesleutel
-        static byte[] aesKey;
-        static byte[] aesIV;
-        public byte[] PublicKey => rsa.ExportRSAPublicKey();
-        public byte[] PrivateKey => rsa.ExportRSAPrivateKey();
 
-        public SecurityHandler()
-        {
-            rsa = RSA.Create(2048);
-        }
-
-        public void SetAESKeyAndIV(byte[] key, byte[] iv)
-        {
-            aesKey = key;
-            aesIV = iv;
-        }
-
-        public byte[] DecryptWithPrivateKey(byte[] data)
-        {
-            return rsa.Decrypt(data, RSAEncryptionPadding.OaepSHA256);
-        }
-
-        public byte[] EncryptMessage(string plaintext)
+        public static byte[] EncryptMessage(byte[] aesKey, byte[] aesIV, string plaintext)
         {
             using var aes = Aes.Create();
             aes.Key = aesKey;
@@ -40,7 +18,7 @@ namespace UDPChatClient
             return encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(plaintext), 0, plaintext.Length);
         }
 
-        public string DecryptMessage(byte[] ciphertext)
+        public static string DecryptMessage(byte[] aesKey, byte[] aesIV, byte[] ciphertext)
         {
             using var aes = Aes.Create();
             aes.Key = aesKey;
@@ -50,6 +28,18 @@ namespace UDPChatClient
 
             using var decryptor = aes.CreateDecryptor();
             return Encoding.UTF8.GetString(decryptor.TransformFinalBlock(ciphertext, 0, ciphertext.Length));
+        }
+
+        public static string GenerateHash()
+        {
+
+            using SHA256 sha256Hash = SHA256.Create();
+
+        }
+
+        public static bool VerifyHash()
+        {
+
         }
 
 
