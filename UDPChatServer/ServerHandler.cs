@@ -61,9 +61,24 @@ namespace UDPChatServer
         async Task Process(IPEndPoint iPEndPoint, string message)
         {
 
+
+            // FIX: Initialize timestamps for new clients to the current time.
+            // Without this, the default DateTime.MinValue makes MonitorClients think
+            // the client has already timed out and marks it as offline immediately.
             if (!ClientDataInterface.clients.ContainsKey(iPEndPoint))
             {
-                ClientDataInterface.clients.TryAdd(iPEndPoint, new ClientState());
+                var now = DateTime.UtcNow;
+                var s = new ClientState
+                {
+                    Username = "",
+                    clientStatus = ClientStatus.Available,
+                    JoinTime = now,
+                    LastSeen = now,
+                    LastPingTime = now,
+                    LastServerPing = now
+                };
+
+                ClientDataInterface.clients.TryAdd(iPEndPoint, s);
                 Console.WriteLine($"Nieuw client endpoint toegevoegd: {iPEndPoint}");
             }
 
@@ -80,6 +95,8 @@ namespace UDPChatServer
             {
                 var tasks = new List<Task>();
 
+                Console.WriteLine("[PING LOOP] tick in");
+
                 foreach (var client in ClientDataInterface.clients)
                 {
 
@@ -94,8 +111,15 @@ namespace UDPChatServer
                         tasks.Add(Task.WhenAll(pingTask, pongTask));
                     }
                 }
-
-                await Task.WhenAll(tasks);
+                try
+                {
+                    await Task.WhenAll(tasks);
+                    Console.WriteLine("[PING LOOP] tick out");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
                 await Task.Delay(intervalMs, token);
             }

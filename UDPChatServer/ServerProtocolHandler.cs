@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Security.Cryptography;
 using UDPChatServer.DataInterfaces;
 using UDPChatServer.Datamodels;
 using UDPChatServer.Security;
@@ -86,11 +87,22 @@ namespace UDPChatServer
 
             if (EncryptedCommands.Contains(command))
             {
-                KeyExchangeMessage keys = await ServerHandler.EncryptionKeyHandler.GetKeyExchangeMessage(senderEndpoint);
-                byte[] encryptedKey = Convert.FromBase64String(keys.AESKey);
-                byte[] encryptedIV = Convert.FromBase64String(keys.AESIV);
-                byte[] cipher = Convert.FromBase64String(content);
-                string plaintext = SecurityHandler.DecryptMessage(encryptedKey, encryptedIV, cipher);
+                // Get raw AES key that was stored during key exchange
+                byte[] aesKey = await ServerHandler.EncryptionKeyHandler.GetAesKey(senderEndpoint);
+
+                // content now holds Base64(nonce|ciphertext|tag)
+                byte[] blob = Convert.FromBase64String(content);
+                string plaintext;
+
+                try
+                {
+                    plaintext = SecurityHandler.DecryptMessage(aesKey, blob);
+                }
+                catch (CryptographicException)
+                {
+                    Console.WriteLine($"[WARN] Message authentication failed from {senderEndpoint}");
+                    return;
+                }
 
                 switch (command)
                 {
@@ -133,11 +145,10 @@ namespace UDPChatServer
         {
             byte[] clientPubKey = Convert.FromBase64String(content);
 
-            KeyExchangeMessage keys = await ServerHandler.EncryptionKeyHandler.GenAESKeyandIV(senderEndpoint, clientPubKey);
-
-            string msg = $"SETKEY {keys.AESKey} {keys.AESIV}";
-
+            KeyExchangeMessage keys = await ServerHandler.EncryptionKeyHandler.GenAESKey(senderEndpoint, clientPubKey);
+            string msg = $"SETKEY {keys.AESKey}";
             await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, msg);
+
         }
 
         private async Task HandleConnect(IPEndPoint senderEndpoint, ClientState clientInfo, string[] parsedData)
@@ -149,15 +160,13 @@ namespace UDPChatServer
 
             if (formattedName == "server" || formattedName.Contains("(") || formattedName.Contains(")"))
             {
-                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"MSG (SERVER) VERBODEN NAAM!", false);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"MSG (SERVER) VERBODEN NAAM!");
                 return;
             }
 
             if (!ServerHandler.ClientDataInterface.GetAllClients().ContainsKey(senderEndpoint))
             {
-
-
-                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"ACK {ackId}", false);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"ACK {ackId}");
 
                 clientInfo.Username = Username;
                 clientInfo.clientStatus = ClientStatus.Available;
@@ -165,7 +174,7 @@ namespace UDPChatServer
                 clientInfo.JoinTime = DateTime.UtcNow;
                 ServerHandler.ClientDataInterface.UpdateClientStatus(senderEndpoint, clientInfo);
 
-                Console.WriteLine($"New client joined: {Username} ({senderEndpoint})");
+                Console.WriteLine($"Nieuw client toegevoegd: {Username} ({senderEndpoint})");
 
             }
             else

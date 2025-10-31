@@ -11,7 +11,7 @@ namespace UDPChatClient
     {
         ConcurrentDictionary<int, TaskCompletionSource<bool>> pendingAcks;
 
-        SecurityHandler encryptionHandler;
+        SecurityHandler securityHandler;
 
         UdpClient client;
         IPEndPoint serverEndpoint;
@@ -29,7 +29,7 @@ namespace UDPChatClient
             serverEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             username = name;
             pendingAcks = new ConcurrentDictionary<int, TaskCompletionSource<bool>>();
-            encryptionHandler = new SecurityHandler();
+            securityHandler = new SecurityHandler();
         }
 
         public async Task ConnectAsync()
@@ -49,27 +49,25 @@ namespace UDPChatClient
                 string[] parts = txt.Split(" ");
                 string command = parts[0];
 
-                if (command == "SETKEY" && !IsSecuredConnection)
-                {
-                    byte[] encKey = Convert.FromBase64String(parts[1]);
-                    byte[] encIV = Convert.FromBase64String(parts[2]);
-
-                    byte[] aesKey = encryptionHandler.DecryptWithPrivateKey(encKey);
-                    byte[] aesIV = encryptionHandler.DecryptWithPrivateKey(encIV);
-
-                    encryptionHandler.SetAESKeyAndIV(aesKey, aesIV);
-                    IsSecuredConnection = true;
-                    ConsoleHandler.WriteToConsole("De verbinding is beveiliged.");
-                }
-
                 switch (command)
                 {
+                    case "SETKEY":
+                        if (IsSecuredConnection) return;
+                        //only encrypted AES key is sent
+                        string base64EncryptedKey = parts[1];
+
+                        securityHandler.SetKey(base64EncryptedKey);
+                        IsSecuredConnection = true;
+                        ConsoleHandler.WriteToConsole("De verbinding is beveiligd.");
+                        break;
                     case "MSG":
                         // MSG <sender> <message...>
                         string sender = parts[1];
                         string encryptedBase64 = string.Join(" ", parts, 2, parts.Length - 2);
-                        byte[] encryptedBytes = Convert.FromBase64String(encryptedBase64);
-                        string message = encryptionHandler.DecryptMessage(encryptedBytes);
+
+                        byte[] blob = Convert.FromBase64String(encryptedBase64);
+                        string message = securityHandler.DecryptMessage(blob);
+
                         ConsoleHandler.WriteToConsole($"{sender}: {message}");
                         break;
 
@@ -145,7 +143,7 @@ namespace UDPChatClient
 
             if (isSuccess)
             {
-                string pubKeyString = Convert.ToBase64String(encryptionHandler.PublicKey);
+                string pubKeyString = Convert.ToBase64String(securityHandler.PublicKey);
                 await SendPacketToServer($"PUBKEY {username} {pubKeyString}");
             }
 
@@ -154,22 +152,27 @@ namespace UDPChatClient
 
         async Task SendMessage(string message)
         {
+            if (!IsSecuredConnection)
+            {
+                ConsoleHandler.WriteToConsole("Er is nog geen veilige verbinding gevestigd", ConsoleColor.Yellow);
+                return;
+            }
+
             int messageID = ackID++;
 
-            string cipherText = Convert.ToBase64String(encryptionHandler.EncryptMessage(message));
+            // Encrypt plaintext into Base64(nonce|cipher|tag)
+            string contentB64 = securityHandler.EncryptForWire(message);
 
-            string fullMsg = $"MSG {username} {messageID} {cipherText}";
+            string wire = $"MSG {username} {messageID} {contentB64}";
 
             int timeout = 5000; // 5 seconden
-
             TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-
             pendingAcks[messageID] = tcs;
 
-            await SendPacketToServer(fullMsg);
-
+            await SendPacketToServer(wire);
             await HandleACK(tcs, timeout, messageID, "Bericht is niet verstuurd naar server!");
         }
+
 
         async Task<bool> HandleACK(TaskCompletionSource<bool> tcs, int timeout, int ackID, string failedMessage, string successMessage = "")
         {
@@ -203,15 +206,10 @@ namespace UDPChatClient
 
         private async Task SendPacketToServer(string data)
         {
-            byte[] bytesToSend;
-
-            string hmac = encryptionHandler.ComputeHMAC(data);
-
-            string fullMsg = $"{data} {hmac}";
-            bytesToSend = Encoding.UTF8.GetBytes(fullMsg);
-
+            byte[] bytesToSend = Encoding.UTF8.GetBytes(data);
             await client.SendAsync(bytesToSend, bytesToSend.Length, serverEndpoint);
         }
+
 
 
     }

@@ -6,47 +6,29 @@ namespace UDPChatServer.Security
 {
     internal class EncryptionKeyHandler
     {
+        private readonly ConcurrentDictionary<IPEndPoint, byte[]> aesKeys = new();
+        private readonly SecurityHandler securityHandler = new();
 
-
-        private ConcurrentDictionary<IPEndPoint, KeyExchangeMessage> keys;
-
-        /// <summary>
-        /// Deze klasse zorgt ervoor dat de AES(symmetrisch) key en IV veilig naar de client gestuurd kan worden
-        /// </summary>
-        public EncryptionKeyHandler()
+        public async Task<KeyExchangeMessage> GenAESKey(IPEndPoint endpoint, byte[] clientPublicKey)
         {
-            keys = new();
-        }
+            // Generate 256-bit AES key
+            byte[] aesKey = RandomNumberGenerator.GetBytes(32);
+            aesKeys[endpoint] = aesKey;
 
-        /// <summary>
-        /// Genereert een AES(symmetrisch) key en IV en encrypte het met de RSA(asymmetrisch) PublicKey zodat allpeen de client deze key kan decrypten
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="clientPubKey"></param>
-        /// <returns></returns>
-        public async Task<KeyExchangeMessage> GenAESKeyandIV(IPEndPoint sender, byte[] clientPubKey)
-        {
+            //   Encrypt key with client's RSA pubkey
             using var rsa = RSA.Create();
-            rsa.ImportRSAPublicKey(clientPubKey, out _);
+            rsa.ImportRSAPublicKey(clientPublicKey, out _);
+            byte[] encryptedKey = rsa.Encrypt(aesKey, RSAEncryptionPadding.OaepSHA256);
 
-            using var aes = Aes.Create();
-            aes.GenerateKey();
-            aes.GenerateIV();
 
-            byte[] encKey = rsa.Encrypt(aes.Key, RSAEncryptionPadding.OaepSHA256); // encrypted key met publieke key van client
-            byte[] encIV = rsa.Encrypt(aes.IV, RSAEncryptionPadding.OaepSHA256); // encrypted key met publieke key van client
-
-            keys[sender] = new KeyExchangeMessage(aes.Key, aes.IV);
-
-            return new KeyExchangeMessage(encKey, encIV);
+            return new KeyExchangeMessage(encryptedKey);
         }
 
-
-        public async Task<KeyExchangeMessage> GetKeyExchangeMessage(IPEndPoint sender)
+        public async Task<byte[]> GetAesKey(IPEndPoint endpoint)
         {
-            return keys[sender];
+            if (!aesKeys.TryGetValue(endpoint, out var key))
+                throw new InvalidOperationException("No AES key for this endpoint.");
+            return key;
         }
-
-        public bool HasKeys(IPEndPoint sender) => keys.ContainsKey(sender);
     }
 }

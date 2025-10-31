@@ -19,40 +19,29 @@ namespace UDPChatServer.DataInterfaces
 
         public async Task SendPacketToClient(IPEndPoint clientEP, string data, bool encrypt = false, int pos = 0)
         {
-            if (encrypt && encryptionKeyHandler.HasKeys(clientEP))
+            if (encrypt)
             {
-                var keys = await encryptionKeyHandler.GetKeyExchangeMessage(clientEP);
-                byte[] key = Convert.FromBase64String(keys.AESKey);
-                byte[] iv = Convert.FromBase64String(keys.AESIV);
+                var key = await encryptionKeyHandler.GetAesKey(clientEP);
 
-                byte[] msgBytes;
+                string[] parts = data.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                if (pos == 0)
+                // Guard the index
+                if (pos >= 0 && pos < parts.Length)
                 {
-                    // Encrypt entire message
-                    msgBytes = SecurityHandler.EncryptMessage(key, iv, data);
-                }
-                else
-                {
-                    string[] parts = data.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                    if (pos >= 0 && pos < parts.Length)
-                    {
-                        byte[] encryptedPart = SecurityHandler.EncryptMessage(key, iv, parts[pos]);
-                        string encryptedBase64 = Convert.ToBase64String(encryptedPart);
-                        parts[pos] = encryptedBase64;
-                    }
-
-                    // Recombine all parts back with spaces
-                    string finalMessage = string.Join(" ", parts);
-                    msgBytes = Encoding.UTF8.GetBytes(finalMessage);
+                    // Encrypt ONLY the target field (e.g., parts[2] for "MSG <name> <payload>")
+                    byte[] blob = SecurityHandler.EncryptMessage(key, parts[pos]);
+                    parts[pos] = Convert.ToBase64String(blob);
                 }
 
+                // Recombine
+                string finalMessage = string.Join(" ", parts);
+                byte[] msgBytes = Encoding.UTF8.GetBytes(finalMessage);
                 await SendRawData(clientEP, msgBytes);
+
             }
             else
             {
-                // No encryption, send as-is
+                // No encryption, send as it is
                 byte[] msgBytes = Encoding.UTF8.GetBytes(data);
                 await SendRawData(clientEP, msgBytes);
             }
