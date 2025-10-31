@@ -84,8 +84,7 @@ namespace UDPChatServer
 
             ClientState clientInfo = ClientDataInterface.clients[iPEndPoint];
 
-            string[] parsed = protocol.FormattedPrompt(message);
-            await protocol.ExecuteCommand(iPEndPoint, clientInfo, parsed);
+            await protocol.ExecuteCommand(iPEndPoint, clientInfo, message);
         }
 
 

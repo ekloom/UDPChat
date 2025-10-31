@@ -18,25 +18,29 @@ namespace UDPChatClient
         string username;
         int ackID;
 
-        public bool ClientIsOnline { get; private set; }
+        public bool ClientIsVerified { get; private set; }
 
         private bool IsSecuredConnection;
 
-        public ClientHandler(string serverIp, int serverPort, string name)
+        public ClientHandler(string serverIp, int serverPort)
         {
-
             client = new UdpClient(0);
             serverEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
-            username = name;
             pendingAcks = new ConcurrentDictionary<int, TaskCompletionSource<bool>>();
             securityHandler = new SecurityHandler();
+            ClientIsVerified = false;
         }
 
         public async Task ConnectAsync()
         {
             _ = Task.Run(() => ListenForMessages());
-            await VerifyConnectionWithServer();
-            ClientIsOnline = true;
+
+            while (!ClientIsVerified)
+            {
+                Console.Write("Vul je (bij)naam in: ");
+                username = Console.ReadLine();
+                await VerifyConnectionWithServer();
+            }
         }
 
         private async Task ListenForMessages()
@@ -89,6 +93,9 @@ namespace UDPChatClient
                     case "PING":
                         await SendPacketToServer($"PONG {username}");
                         break;
+                    case "SERVERMSG":
+                        ConsoleHandler.WriteToConsole(string.Join(" ", parts.Skip(1)), ConsoleColor.Red);
+                        break;
                     default:
                         ConsoleHandler.WriteToConsole("Onbekend bericht ontvangen: " + txt);
                         break;
@@ -133,7 +140,7 @@ namespace UDPChatClient
 
             pendingAcks[_ackID] = tcs;
 
-            await SendPacketToServer($"CONNECT {username} {_ackID}");
+            await SendPacketToServer($"CONNECT {_ackID} {username}");
 
             bool isSuccess = await HandleACK(tcs,
                             timeout,
@@ -145,6 +152,7 @@ namespace UDPChatClient
             {
                 string pubKeyString = Convert.ToBase64String(securityHandler.PublicKey);
                 await SendPacketToServer($"PUBKEY {username} {pubKeyString}");
+                ClientIsVerified = true;
             }
 
         }

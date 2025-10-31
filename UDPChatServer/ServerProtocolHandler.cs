@@ -18,105 +18,126 @@ namespace UDPChatServer
             ServerHandler = serverHandler;
         }
 
-        /// <summary>
-        /// ProtocolMessage gets formatted to an array
-        /// </summary>
-        /// <param name="ProtocolMessage"></param>
-        /// <returns></returns>
-        public string[] FormattedPrompt(string ProtocolMessage)
+        public async Task ExecuteCommand(IPEndPoint senderEndpoint, ClientState clientInfo, string protocolMessage)
         {
-            string[] formattedMessage = ProtocolMessage.Split(" ");
-
-            // Command en name must always be given
-            string command = formattedMessage[0];
-            string name = formattedMessage[1];
-
-            string messageId = null;
-            string data;
-
-
-
-            if (command == "MSG" && formattedMessage.Length >= 4)
+            if (string.IsNullOrWhiteSpace(protocolMessage))
             {
-                // MSG <name> <messageId> <text...>
-                messageId = formattedMessage[2];
-                data = string.Join(" ", formattedMessage.Skip(3));
-
-                return new string[] { command, name, messageId, data };
-            }
-            else if (command == "PONG")
-            {
-                return new string[] { command, name };
-            }
-            else
-            {
-                // (andere commands) <name> <data...>
-                data = string.Join(" ", formattedMessage.Skip(2));
-                return new string[] { command, name, data };
+                Console.WriteLine("Leeg/ongeldig protocolbericht ontvangen van {0}", senderEndpoint);
+                return;
             }
 
-        }
+            // Split only the first word to identify the command
+            int firstSpace = protocolMessage.IndexOf(' ');
+            string command = firstSpace == -1 ? protocolMessage : protocolMessage[..firstSpace];
 
-        public async Task ExecuteCommand(IPEndPoint senderEndpoint, ClientState clientInfo, string[] parsedData)
-        {
-            string command = parsedData[0];
-            string clientName = parsedData[1];
-            string content = parsedData.Length > 3 ? parsedData[3] : parsedData.Length > 2 ? parsedData[2] : "";
-
+            // Handle non-encrypted commands directly
             if (NonEncryptedCommands.Contains(command))
             {
                 switch (command)
                 {
                     case "CONNECT":
+                    {
+                        // CONNECT <ack> <username ...>
+                        var parts = protocolMessage.Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+                        string ack = parts.Length > 1 ? parts[1] : "";
+                        string username = parts.Length > 2 ? parts[2] : "";
+
+                        string[] parsedData = { command, ack, username };
                         await HandleConnect(senderEndpoint, clientInfo, parsedData);
-                        return;
+                        break;
+                    }
+
                     case "PUBKEY":
-                        await HandlePubKey(senderEndpoint, clientInfo, content);
-                        return;
+                    {
+                        // PUBKEY <ack> <key...>
+                        var parts = protocolMessage.Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+                        string ack = parts.Length > 1 ? parts[1] : "";
+                        string key = parts.Length > 2 ? parts[2] : "";
+
+                        await HandlePubKey(senderEndpoint, clientInfo, key);
+                        break;
+                    }
+
                     case "PONG":
+                    {
+                        // PONG <ack>
+                        var parts = protocolMessage.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                        string ack = parts.Length > 1 ? parts[1] : "";
+
                         if (ServerHandler.ClientDataInterface.GetPendingPongs().TryRemove(senderEndpoint, out var tcs))
                             tcs.SetResult(true);
-                        clientInfo.LastPingTime = DateTime.UtcNow;
-                        return;
-                    case "STATUS":
-                        await HandleStatus(senderEndpoint, clientInfo, content);
-                        break;
 
+                        clientInfo.LastPingTime = DateTime.UtcNow;
+                        break;
+                    }
+
+                    case "STATUS":
+                    {
+                        // STATUS <ack> <status text...>
+                        var parts = protocolMessage.Split(' ', 3, StringSplitOptions.RemoveEmptyEntries);
+                        string ack = parts.Length > 1 ? parts[1] : "";
+                        string statusText = parts.Length > 2 ? parts[2] : "";
+
+                        await HandleStatus(senderEndpoint, clientInfo, statusText);
+                        break;
+                    }
+
+                    default:
+                        Console.WriteLine($"Onbekend niet-versleuteld commando ontvangen: {command}");
+                        break;
                 }
+
+                return;
             }
 
+            // Handle encrypted commands
             if (EncryptedCommands.Contains(command))
             {
-                // Get raw AES key that was stored during key exchange
+                // MSG <identifier> <messageId> <Base64(blob)>
+                var parts = protocolMessage.Split(' ', 4, StringSplitOptions.RemoveEmptyEntries);
+                string identifier = parts.Length > 1 ? parts[1] : "";
+                string messageId = parts.Length > 2 ? parts[2] : "";
+                string content = parts.Length > 3 ? parts[3] : "";
+
                 byte[] aesKey = await ServerHandler.EncryptionKeyHandler.GetAesKey(senderEndpoint);
+                byte[] blob;
 
-                // content now holds Base64(nonce|ciphertext|tag)
-                byte[] blob = Convert.FromBase64String(content);
+                try
+                {
+                    blob = Convert.FromBase64String(content);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine($"[WARN] Ongeldige Base64 payload van {senderEndpoint}");
+                    return;
+                }
+
                 string plaintext;
-
                 try
                 {
                     plaintext = SecurityHandler.DecryptMessage(aesKey, blob);
                 }
                 catch (CryptographicException)
                 {
-                    Console.WriteLine($"[WARN] Message authentication failed from {senderEndpoint}");
+                    Console.WriteLine($"[WARN] Bericht authenticatie van {senderEndpoint} is gefaald!");
                     return;
                 }
 
                 switch (command)
                 {
                     case "MSG":
-                        await HandleMessage(senderEndpoint, clientInfo, command, clientName, parsedData[2], plaintext);
+                        await HandleMessage(senderEndpoint, clientInfo, command, identifier, messageId, plaintext);
+                        break;
+
+                    default:
+                        Console.WriteLine($"Onbekend versleuteld commando ontvangen: {command}");
                         break;
                 }
-            }
-            else
-            {
-                Console.WriteLine($"Onbekend commando ontvangen: {command}");
+
+                return;
             }
 
-
+            Console.WriteLine($"Onbekend commando ontvangen: {command}");
         }
 
         private async Task HandleStatus(IPEndPoint senderEndpoint, ClientState clientInfo, string content)
@@ -153,14 +174,22 @@ namespace UDPChatServer
 
         private async Task HandleConnect(IPEndPoint senderEndpoint, ClientState clientInfo, string[] parsedData)
         {
-            string Username = parsedData[1];
-            string ackId = parsedData[2];
+            string Username = parsedData[2];
+            string ackId = parsedData[1];
 
             string formattedName = Username.ToLower();
 
-            if (formattedName == "server" || formattedName.Contains("(") || formattedName.Contains(")"))
+
+            if (formattedName == "server" || formattedName.Contains("server"))
             {
-                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"MSG (SERVER) VERBODEN NAAM!");
+                Console.WriteLine("{0} heeft verboden naam ingevoerd. (FLAG)", senderEndpoint);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"SERVERMSG (SERVER) VERBODEN NAAM");
+                return;
+            }
+            else if (formattedName.Contains("(") || formattedName.Contains(")") || formattedName.Contains(" "))
+            {
+                Console.WriteLine("{0} heeft verboden tekens ingevoerd.", senderEndpoint);
+                await ServerHandler.MessageDataInterface.SendPacketToClient(senderEndpoint, $"SERVERMSG (SERVER) Deze tekens zijn niet toegstaan! Dit zijn de enigste toegestane charaters (\"_\",\"-\")");
                 return;
             }
 
