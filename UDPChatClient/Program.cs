@@ -1,8 +1,4 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Text;
-
-namespace UDPChatClient
+﻿namespace UDPChatClient
 {
 
     public class MainClass
@@ -26,13 +22,11 @@ namespace UDPChatClient
 
             Console.WriteLine("Welkom bij UDPChat!");
 
-   
+
             try
             {
-                Console.Write("Vul je (bij)naam in: ");
-                string username = Console.ReadLine();
 
-                ClientHandler clientHandler = new ClientHandler(hostName, portNumber, username);
+                ClientHandler clientHandler = new ClientHandler(hostName, portNumber);
                 await clientHandler.ConnectAsync();
 
                 await ConsoleHandler.ReadInputLoop(clientHandler);

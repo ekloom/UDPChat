@@ -9,6 +9,7 @@ namespace UDPChatClient
          * dan hebben ze even de console in macht en wordt de andere methode geblockt) */
         private static readonly object consoleLock = new object();
         private static string currentInput = "";
+        private static bool _ClientIsVerified = false;
 
         public static void WriteToConsole(string message, ConsoleColor consoleColor = ConsoleColor.White)
         {
@@ -23,7 +24,7 @@ namespace UDPChatClient
                 Console.WriteLine(message);
                 if (consoleColor != ConsoleColor.White) Console.ResetColor();
 
-
+                if (!_ClientIsVerified) return;
                 Console.Write("Verstuur bericht: " + currentInput);
             }
         }
@@ -31,7 +32,8 @@ namespace UDPChatClient
 
         public static async Task ReadInputLoop(ClientHandler clientHandler)
         {
-            while (clientHandler.ClientIsOnline)
+            _ClientIsVerified = clientHandler.ClientIsVerified;
+            while (clientHandler.ClientIsVerified)
             {
                 string input = await Task.Run(() => Console.ReadLine());
 
