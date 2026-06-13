@@ -54,4 +54,6 @@ TestResult.xml
 nunit-*.xml
 
 
+
 [Ff]ix/
+UDPChatClient/Properties/launchSettings.json

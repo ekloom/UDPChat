@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "UDPChatServer\\UDPChatServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "UDPChatClient\\UDPChatClient.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

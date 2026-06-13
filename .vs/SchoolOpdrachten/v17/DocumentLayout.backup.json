@@ -1,58 +1,34 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Github_Projects\\School\\UDPChat\\",
+  "WorkspaceRootPath": "D:\\Projects\\School\\UDPChat\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\github_projects\\school\\udpchat\\udpchatclient\\clienthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\clienthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\projects\\school\\udpchat\\udpchatclient\\udpchatclient.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\udpchatclient.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\serverprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\serverprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\projects\\school\\udpchat\\udpchatserver\\udpchatserver.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\udpchatserver.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\serverhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\serverhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\datainterfaces\\clientdatainterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\datainterfaces\\clientdatainterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\github_projects\\school\\udpchat\\udpchatclient\\consolehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\consolehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\github_projects\\school\\udpchat\\udpchatclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\projects\\school\\udpchat\\udpchatclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\github_projects\\school\\udpchat\\udpchatclient\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\security\\encryptionkeyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\projects\\school\\udpchat\\udpchatserver\\security\\encryptionkeyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\security\\encryptionkeyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\datainterfaces\\messagedatainterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\datainterfaces\\messagedatainterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\projects\\school\\udpchat\\udpchatserver\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\security\\keyexchangemessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\security\\keyexchangemessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\projects\\school\\udpchat\\udpchatserver\\serverprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\serverprotocolhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\datainterfaces\\messagedatainterfacehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\datainterfaces\\messagedatainterfacehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|d:\\github_projects\\school\\udpchat\\udpchatserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D5DD621F-4B75-40B0-98CA-8B2F042EFA97}|UDPChatServer\\UDPChatServer.csproj|solutionrelative:udpchatserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|d:\\projects\\school\\udpchat\\udpchatclient\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FCFEC3F-7EDB-4A43-B08F-40B5928593AD}|UDPChatClient\\UDPChatClient.csproj|solutionrelative:udpchatclient\\security\\securityhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,29 +38,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "SecurityHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\SecurityHandler.cs",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\Security\\SecurityHandler.cs",
               "RelativeDocumentMoniker": "UDPChatServer\\Security\\SecurityHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\SecurityHandler.cs",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\Security\\SecurityHandler.cs",
               "RelativeToolTip": "UDPChatServer\\Security\\SecurityHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-11T09:13:18.027Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 3,
               "Title": "EncryptionKeyHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\EncryptionKeyHandler.cs",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\Security\\EncryptionKeyHandler.cs",
               "RelativeDocumentMoniker": "UDPChatServer\\Security\\EncryptionKeyHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\EncryptionKeyHandler.cs",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\Security\\EncryptionKeyHandler.cs",
               "RelativeToolTip": "UDPChatServer\\Security\\EncryptionKeyHandler.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -94,145 +69,66 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "SecurityHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\Security\\SecurityHandler.cs",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\Security\\SecurityHandler.cs",
               "RelativeDocumentMoniker": "UDPChatClient\\Security\\SecurityHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\Security\\SecurityHandler.cs",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\Security\\SecurityHandler.cs",
               "RelativeToolTip": "UDPChatClient\\Security\\SecurityHandler.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAIwDsAAABdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-31T08:14:00.698Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ServerProtocolHandler.cs",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\ServerProtocolHandler.cs",
+              "RelativeDocumentMoniker": "UDPChatServer\\ServerProtocolHandler.cs",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\ServerProtocolHandler.cs",
+              "RelativeToolTip": "UDPChatServer\\ServerProtocolHandler.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwA8AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T09:15:48.545Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UDPChatClient",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\UDPChatClient.csproj",
+              "RelativeDocumentMoniker": "UDPChatClient\\UDPChatClient.csproj",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\UDPChatClient.csproj",
+              "RelativeToolTip": "UDPChatClient\\UDPChatClient.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-13T13:51:20.546Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ServerProtocolHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\ServerProtocolHandler.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\ServerProtocolHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\ServerProtocolHandler.cs",
-              "RelativeToolTip": "UDPChatServer\\ServerProtocolHandler.cs",
-              "ViewState": "AgIAAKYAAAAAAAAAAAAQwLQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:15:48.545Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ConsoleHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\ConsoleHandler.cs",
-              "RelativeDocumentMoniker": "UDPChatClient\\ConsoleHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\ConsoleHandler.cs",
-              "RelativeToolTip": "UDPChatClient\\ConsoleHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T19:38:31.412Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ClientHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\ClientHandler.cs",
-              "RelativeDocumentMoniker": "UDPChatClient\\ClientHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\ClientHandler.cs",
-              "RelativeToolTip": "UDPChatClient\\ClientHandler.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAnwCgAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T19:20:12.193Z",
+              "Title": "UDPChatServer",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\UDPChatServer.csproj",
+              "RelativeDocumentMoniker": "UDPChatServer\\UDPChatServer.csproj",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatServer\\UDPChatServer.csproj",
+              "RelativeToolTip": "UDPChatServer\\UDPChatServer.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-13T13:51:12.288Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ServerHandler.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\ServerHandler.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\ServerHandler.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\ServerHandler.cs",
-              "RelativeToolTip": "UDPChatServer\\ServerHandler.cs",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAmwFYAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:12:42.646Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "MessageDataInterface.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\MessageDataInterface.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\DataInterfaces\\MessageDataInterface.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\MessageDataInterface.cs",
-              "RelativeToolTip": "UDPChatServer\\DataInterfaces\\MessageDataInterface.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAIwCsAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:28:08.241Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ClientDataInterface.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\ClientDataInterface.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\DataInterfaces\\ClientDataInterface.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\ClientDataInterface.cs",
-              "RelativeToolTip": "UDPChatServer\\DataInterfaces\\ClientDataInterface.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:38:32.775Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\Program.cs",
+              "DocumentMoniker": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\Program.cs",
               "RelativeDocumentMoniker": "UDPChatClient\\Program.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatClient\\Program.cs",
+              "ToolTip": "D:\\Projects\\School\\UDPChat\\UDPChatClient\\Program.cs",
               "RelativeToolTip": "UDPChatClient\\Program.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAnwB8AAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAUAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T19:31:27.286Z",
+              "WhenOpened": "2026-06-13T13:41:45.472Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "KeyExchangeMessage.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\KeyExchangeMessage.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\Security\\KeyExchangeMessage.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Security\\KeyExchangeMessage.cs",
-              "RelativeToolTip": "UDPChatServer\\Security\\KeyExchangeMessage.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:36:06.105Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "MessageDataInterfaceHelper.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\MessageDataInterfaceHelper.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\DataInterfaces\\MessageDataInterfaceHelper.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\DataInterfaces\\MessageDataInterfaceHelper.cs",
-              "RelativeToolTip": "UDPChatServer\\DataInterfaces\\MessageDataInterfaceHelper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:39:40.291Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Program.cs",
-              "RelativeDocumentMoniker": "UDPChatServer\\Program.cs",
-              "ToolTip": "D:\\Github_Projects\\School\\UDPChat\\UDPChatServer\\Program.cs",
-              "RelativeToolTip": "UDPChatServer\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T09:14:37.888Z"
             }
           ]
         }
